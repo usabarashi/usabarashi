@@ -23,4 +23,3 @@ jobs:
           UTC_OFFSET: 8
           EXCLUDE: ""
           AUTO_PUSH: true
-          THEME: "default"
