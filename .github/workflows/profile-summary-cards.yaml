@@ -14,6 +14,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          fetch-depth: 0
+      - name: switch-to-summary-branch
+        env:
+          SUMMARY_BRANCH: github-profile-summay-cards
+        run: |
+          git fetch origin "${SUMMARY_BRANCH}" || true
+          if git show-ref --verify --quiet "refs/heads/${SUMMARY_BRANCH}"; then
+            git switch "${SUMMARY_BRANCH}"
+          elif git show-ref --verify --quiet "refs/remotes/origin/${SUMMARY_BRANCH}"; then
+            git switch --track "origin/${SUMMARY_BRANCH}"
+          else
+            git switch -c "${SUMMARY_BRANCH}"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - uses: vn7n24fzkq/github-profile-summary-cards@5055b27ac896c627043ead432f9b2fa973aa2c80 # v0.7.0
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
