@@ -39,3 +39,15 @@ jobs:
           UTC_OFFSET: 9
           EXCLUDE: ""
           AUTO_PUSH: true
+
+  # Re-enable this workflow via the GitHub API before it can be disabled.
+  # Scheduled workflows are auto-disabled after 60 days without commits on the
+  # default branch; this job keeps the cron alive without pushing dummy commits.
+  keepalive:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-slime
+    name: keep-scheduled-workflow-alive
+    permissions:
+      actions: write
+    steps:
+      - uses: liskin/gh-workflow-keepalive@f72ff1a1336129f29bf0166c0fd0ca6cf1bcb38c # v1.2.1
